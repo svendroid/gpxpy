@@ -132,27 +132,37 @@ def calculate_max_speed(speeds_and_distances):
 def calculate_uphill_downhill(elevations):
     if not elevations:
         return 0, 0
+    # size = len(elevations)
+    #
+    # def __filter(n):
+    #     current_ele = elevations[n]
+    #     if current_ele is None:
+    #         return False
+    #     if 0 < n < size - 1:
+    #         previous_ele = elevations[n-1]
+    #         next_ele = elevations[n+1]
+    #         if previous_ele is not None and current_ele is not None and next_ele is not None:
+    #             return previous_ele*.3 + current_ele*.4 + next_ele*.3
+    #     return current_ele
+    #
+    # smoothed_elevations = list(map(__filter, range(size)))
+    #
+    # uphill, downhill = 0., 0.
+    #
+    # for n, elevation in enumerate(smoothed_elevations):
+    #     if n > 0 and elevation is not None and smoothed_elevations is not None:
+    #         d = elevation - smoothed_elevations[n-1]
+    #         if d > 0:
+    #             uphill += d
+    #         else:
+    #             downhill -= d
 
-    size = len(elevations)
-
-    def __filter(n):
-        current_ele = elevations[n]
-        if current_ele is None:
-            return False
-        if 0 < n < size - 1:
-            previous_ele = elevations[n-1]
-            next_ele = elevations[n+1]
-            if previous_ele is not None and current_ele is not None and next_ele is not None:
-                return previous_ele*.3 + current_ele*.4 + next_ele*.3
-        return current_ele
-
-    smoothed_elevations = list(map(__filter, range(size)))
-
-    uphill, downhill = 0., 0.
-
-    for n, elevation in enumerate(smoothed_elevations):
-        if n > 0 and elevation is not None and smoothed_elevations is not None:
-            d = elevation - smoothed_elevations[n-1]
+    # overwrite smoothed uphill/downhill calculation to get same results as on the movescount webpage or GpsMaster
+    uphill = 0.
+    downhill = 0.
+    for n, elevation in enumerate(elevations):
+        if n > 1:
+            d = elevation - elevations[n-1]
             if d > 0:
                 uphill += d
             else:
@@ -347,7 +357,7 @@ class LocationDelta:
         """
         Version 1:
             Distance (in meters).
-            angle_from_north *clockwise*. 
+            angle_from_north *clockwise*.
             ...must be given
         Version 2:
             latitude_diff and longitude_diff
