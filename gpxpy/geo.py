@@ -161,7 +161,7 @@ def calculate_uphill_downhill(elevations):
     uphill = 0.
     downhill = 0.
     for n, elevation in enumerate(elevations):
-        if n > 1:
+        if n > 0:
             d = elevation - elevations[n-1]
             if d > 0:
                 uphill += d
